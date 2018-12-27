@@ -30,18 +30,30 @@ NOTE: DO NOT run this as ```service anonsurf $COMMAND```. Run this as ```anonsur
 
 ```bash
 Usage:
- anonsurf {start|stop|restart|change|status}
+                  ──=Parrot OS AnonSurf Mod=──
 
- start - Start system-wide anonymous
-          tunneling under TOR proxy through iptables
- stop - Reset original iptables settings
-          and return to clear navigation
- restart - Combines "stop" and "start" options
- change - Changes identity restarting TOR 
- status - Check if AnonSurf is working properly
-----[ I2P related features ]----
- starti2p - Start i2p services
- stopi2p - Stop i2p services
+       ┌──[user@hostname]─[/home/user]─[123.74.35.66 US]
+       └──╼$anonsurf {start|stop|restart|change|status|myip|mymac|hidemac}
+    
+        start ─── Start system-wide anonymous tunneling under          
+                  TOR proxy through iptables.	  
+        stop ──── Reset original iptables settings and return 
+                  to clear navigation
+        restart ─ Combines "stop" and "start" options
+        change ── Changes identity restarting TOR
+        status ── Check if AnonSurf is working properly
+        myip ──── Show your current IP address
+        mymac ─── Show your MAC's
+        hidemac ─ Change MAC address
+
+	               ----[ I2P related features ]----
+
+        starti2p- Start i2p services
+        stopi2p ─ Stop i2p services
+
+    Dance like no one's wathing. Encrypt like everyone is :)
+
+
 ```
 
 ## Installation
