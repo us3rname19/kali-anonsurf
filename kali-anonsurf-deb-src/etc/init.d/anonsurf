@@ -37,6 +37,8 @@
 # along with Parrot Security OS. If not, see <http://www.gnu.org/licenses/>.
 
 
+export WHITE='\033[1;97m'
+export CYAN='\033[1;96m'
 export BLUE='\033[1;94m'
 export GREEN='\033[1;92m'
 export RED='\033[1;91m'
@@ -113,14 +115,14 @@ function ip {
 
 	echo -e "\nMy ip is:\n"
 	sleep 1
-	curl "http://myexternalip.com/raw" # Had a few issues with FrozenBox giving me the wrong IP address
+	curl "https://start.parrotsec.org/ip/" # Had a few issues with FrozenBox giving me the wrong IP address
 	echo -e "\n\n----------------------------------------------------------------------"
 }
 
 function start {
 	# Make sure only root can run this script
 	if [ $(id -u) -ne 0 ]; then
-		echo -e -e "\n$GREEN[$RED!$GREEN] $RED This script must be run as root$RESETCOLOR\n" >&2
+		echo -e -e "\n$GREEN[$RED!$GREEN] $RED You aren't a root bitch!$RESETCOLOR\n" >&2
 		exit 1
 	fi
 	
@@ -268,6 +270,29 @@ function status {
 	service tor status
 }
 
+function mymac {
+    echo -e $BLUE""MAC Addresses:$RESETCOLOR
+    sudo ip l| gawk '{print $2}'
+    
+}
+
+function mac {
+    read -p "Input interface name:" name
+    sudo ip link set dev $name down
+    sleep 1
+    read -p "Reset to original, permanent hardware MAC/Set random vendor MAC of any kind (p/n) :" s
+    case $s in
+    p)sudo macchanger -p $name;;
+    n)sudo macchanger -A $name;;
+    *)echo -e "\n$GREEN[$RED!$GREEN] $RED Incorrect value.$RESETCOLOR\n" >&2;exit 1;;
+    esac
+    sleep 2
+    sudo ip link set dev $name up 
+    sleep 2
+    sudo service networking restart
+    echo ""
+}
+
 case "$1" in
 	start)
 		init
@@ -297,26 +322,38 @@ case "$1" in
 		sleep 1
 		$0 start
 	;;
+    hidemac)
+        mac
+    ;;
+    mymac)
+        mymac
+    ;;
    *)
 echo -e "
-Parrot AnonSurf Module
-	Usage:
-	$RED┌──[$GREEN$USER$YELLOW@$BLUE`hostname`$RED]─[$GREEN$PWD$RED]
-	$RED└──╼ \$$GREEN"" anonsurf $RED{$GREEN""start$RED|$GREEN""stop$RED|$GREEN""restart$RED|$GREEN""change$RED""$RED|$GREEN""status$RED""}
-	
-	$RED start$BLUE -$GREEN Start system-wide anonymous
-		  tunneling under TOR proxy through iptables	  
-	$RED stop$BLUE -$GREEN Reset original iptables settings
-		  and return to clear navigation
-	$RED restart$BLUE -$GREEN Combines \"stop\" and \"start\" options
-	$RED change$BLUE -$GREEN Changes identity restarting TOR
-	$RED status$BLUE -$GREEN Check if AnonSurf is working properly
-	$RED myip$BLUE -$GREEN Show your current IP address
-	----[ I2P related features ]----
-	$RED starti2p$BLUE -$GREEN Start i2p services
-	$RED stopi2p$BLUE -$GREEN Stop i2p services
-	
-$RESETCOLOR" >&2
+$BLUE             ──=Parrot OS AnonSurf Mod=──
+
+       $CYAN┌──[$CYAN$USER$BLUE@$GREY`hostname`$CYAN]─[$BLUE$PWD$CYAN]─[$BLUE`wget -qO- start.parrotsec.org/ip/`$CYAN]
+       $CYAN└──╼\$$WHITE""anonsurf $CYAN{$WHITE""start$CYAN|$WHITE""stop$CYAN|$WHITE""restart$CYAN|$WHITE""change$CYAN""$CYAN|$WHITE""status$CYAN|$WHITE""myip$CYAN|$WHITE""mymac$CYAN|$WHITE""hidemac$CYAN""}
+    
+       $CYAN start$BLUE ───$WHITE Start system-wide anonymous tunneling under          
+                  TOR proxy through iptables.	  
+       $CYAN stop$BLUE ────$WHITE Reset original iptables settings and return 
+                  to clear navigation
+       $CYAN restart$BLUE ─$WHITE Combines \"stop\" and \"start\" options
+       $CYAN change$BLUE ──$WHITE Changes identity restarting TOR
+       $CYAN status$BLUE ──$WHITE Check if AnonSurf is working properly
+       $CYAN myip$BLUE ────$WHITE Show your current IP address
+       $CYAN mymac$BLUE ───$WHITE Show your MAC's
+       $CYAN hidemac$BLUE ─$WHITE Change MAC address
+
+	  $BLUE ----[ I2P related features ]----
+
+       $CYAN starti2p$BLUE-$WHITE Start i2p services
+       $CYAN stopi2p$BLUE ─$WHITE Stop i2p services
+$RESETCOLOR
+$BLUE    Dance like no one's wathing. Encrypt like everyone is :)
+$RESETCOLOR
+" >&2
 exit 1
 ;;
 esac
