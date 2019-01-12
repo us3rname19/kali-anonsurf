@@ -113,11 +113,13 @@ function stopi2p {
 
 function ip {
 
-	echo -e "\nMy ip is:\n"
+	echo -e $BLUE"\nMy public ip:"$RESETCOLOR
 	sleep 1
-	curl "https://start.parrotsec.org/ip/" # Had a few issues with FrozenBox giving me the wrong IP address
-	echo -e "\n\n----------------------------------------------------------------------"
+	curl -s -m 10 ipinfo.io| tr -d '"{}' | sed 's/ //g'
 }
+
+ip_menu="$(curl -s -m 10 ipinfo.io/ip)" 
+co_menu="$(curl -s -m 10 ipinfo.io/country)"
 
 function start {
 	# Make sure only root can run this script
@@ -332,7 +334,7 @@ case "$1" in
 echo -e "
 $BLUE             ──=Parrot OS AnonSurf Mod=──
 
-       $CYAN┌──[$CYAN$USER$BLUE@$GREY`hostname`$CYAN]─[$BLUE$PWD$CYAN]─[$BLUE`wget -qO- start.parrotsec.org/ip/`$CYAN]
+       $CYAN┌──[$CYAN$USER$BLUE@$GREY`hostname`$CYAN]─[$BLUE$PWD$CYAN]─[$BLUE$PWD$CYAN]─[$BLUE$ip_menu $co_menu$CYAN]
        $CYAN└──╼\$$WHITE""anonsurf $CYAN{$WHITE""start$CYAN|$WHITE""stop$CYAN|$WHITE""restart$CYAN|$WHITE""change$CYAN""$CYAN|$WHITE""status$CYAN|$WHITE""myip$CYAN|$WHITE""mymac$CYAN|$WHITE""hidemac$CYAN""}
     
        $CYAN start$BLUE ───$WHITE Start system-wide anonymous tunneling under          

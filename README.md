@@ -30,7 +30,7 @@ NOTE: DO NOT run this as ```service anonsurf $COMMAND```. Run this as ```anonsur
 
 ```bash
 Usage:
-                  ──=Parrot OS AnonSurf Mod=──
+                ──=Parrot OS AnonSurf Mod=──
 
        ┌──[user@hostname]─[/home/user]─[123.74.35.66 US]
        └──╼$anonsurf {start|stop|restart|change|status|myip|mymac|hidemac}
@@ -46,7 +46,7 @@ Usage:
         mymac ─── Show your MAC's
         hidemac ─ Change MAC address
 
-	               ----[ I2P related features ]----
+                ----[ I2P related features ]----
 
         starti2p- Start i2p services
         stopi2p ─ Stop i2p services
